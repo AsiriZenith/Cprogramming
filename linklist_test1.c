@@ -18,6 +18,8 @@ struct node *delete_beg(struct node *);
 struct node *delete_end(struct node *);
 struct node *delete_node(struct node *);
 struct node *delete_after(struct node *);
+struct node *delete_list(struct node *);
+struct node *sort_list(struct node *);
 
 int main()
 {
@@ -40,16 +42,6 @@ int main()
         printf("\n 13. Exit");
         printf("\n Enter your option : ");
         scanf("%d", &n);
-        // start = createList(start);
-        // display(start);
-        // insert_beg(start);
-        // display(start);
-        // insert_end(start);
-        // display(start);
-        // insert_before(start);
-        // insert_after(start);
-        // delete_beg(start);
-        // delete_end(start);
 
         switch (n)
         {
@@ -84,13 +76,13 @@ int main()
         case 10:
             delete_after(start);
             break;
-        // case 11:
-        //     delete_list(start);
-        //     printf("\n\nLinked list Deleted!!");
-        //     break;
-        // case 12:
-        //     sort_list(start);
-        //     break;
+        case 11:
+            start = delete_list(start);
+            printf("\n\nLinked list Deleted!!");
+            break;
+        case 12:
+            start = sort_list(start);
+            break;
         default:
             break;
         }
@@ -302,6 +294,7 @@ struct node *delete_after(struct node *start)
     scanf("%d", &num);
     printf("\nBefore delete: ");
     display(start);
+    ptr1 = start;
     while (ptr1->data != num)
     {
         ptr1 = ptr1->next;
@@ -310,6 +303,61 @@ struct node *delete_after(struct node *start)
     ptr1->next = ptr2->next;
     free(ptr2);
     printf("\nafter delete: ");
+    display(start);
+    return start;
+}
+
+struct node *delete_list(struct node *start)
+{
+    struct node *ptr1, *ptr2;
+    ptr1 = start;
+    if (ptr1 == NULL)
+    {
+        printf("\nNothing anything here!!");
+    }
+    else
+    {
+        while (ptr1->next != NULL)
+        {
+            ptr2 = ptr1;
+            ptr1 = ptr1->next;
+            free(ptr2);
+        }
+        free(ptr1);
+    }
+    return NULL;
+}
+
+struct node *sort_list(struct node *start)
+{
+    int i, j, temp, k = 0;
+    struct node *ptr1, *ptr2;
+    ptr1 = start;
+    printf("\nbefore sorting : ");
+    display(start);
+    //determine the lengh of linked list
+    while (ptr1->next != NULL)
+    {
+        k++;
+        ptr1 = ptr1->next;
+    }
+    for (i = 0; i < k; i++)
+    {
+        ptr1 = start;
+        ptr2 = ptr1->next;
+        for (j = 0; j < k - i; j++)
+        {
+            if (ptr1->data > ptr2->data)
+            {
+                temp = ptr1->data;
+                ptr1->data = ptr2->data;
+                ptr2->data = temp;
+            }
+            ptr1 = ptr2;
+            ptr2 = ptr2->next;
+        }
+    }
+    printf("\nafter sorting : ");
     display(start);
     return start;
 }
